@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee SKU Generator</title>
+    <style>
+        :root{
+            --brown: #583520;  /* Main dark brown color */
+            --light-brown: #a9977d;  /* Light brown color */
+            --cream: #f5f0e8;  /* Cream color */
+            --white: #ffffff;  /* White color */
+            --border: #d9c9aa;  /* Border color */
+        }
+        
+        *{
+            box-sizing: border-box;  /* Includes padding and border in element size */
+            margin: 0;  /* Removes default margins */
+            padding: 0;  /* Removes default padding */
+        }
+
+        body{
+            font-family: Garamond, "Baskerville Old Face", serif;
+            background-color: #211b16;  /* Fallback background color */
+            color: var(--brown);  /* Default text color */
+            background-image: url(background.png);  /* Page background image */
+            background-repeat: no-repeat;  /* Prevents background from repeating */
+            background-size: cover;  /* Makes background cover the page */
+            background-position: center;  /* Centers the background image */
+            background-attachment: fixed;  /* Keeps background fixed while scrolling */
+            min-height: 100vh;  /* Makes page at least the full screen height */
+            display: flex;  /* Enables flexbox layout */
+            flex-direction: column;  /* Arranges elements vertically */
+        }
+
+
+        input,
+        select{
+            width: 100%;  /* Makes fields fill their container */
+            height: 38px;  /* Sets field height */
+            padding: 8px 10px;  /* Adds space inside the fields */
+            margin-bottom: 18px;  /* Adds space below each field */
+            border: 1px solid var(--cream);  /* Sets field border */
+            border-radius: 5px;  /* Rounds field corners */
+            background-color: var(--light-brown); /* Sets field background */
+            color: var(--brown);  /* Sets field text color */
+            font-size: 14px;  /* Sets field text size */
+        }
+
+        header{
+            height: 77px;  /* Sets header height */
+            background-color: var(--white);  /* Sets header background */
+            align-items: center;  /* Centers items vertically */
+            justify-content: space-between;  /* Spaces header items apart */
+            padding: 0 20px;  /* Adds horizontal spacing */
+            display: flex;  /* Enables flexbox layout */
+        }
+
+        .logo{
+            text-align: center;
+            font-family: Georgia, serif;
+            font-size: 24px;
+            color: var(--brown);
+            background-image: url("logo.png");
+            background-repeat: no-repeat;  /* Prevents logo from repeating */
+            background-size: contain;  /* Keeps the logo inside its container */
+            background-position: center;  /* Centers the logo */
+
+            width: 90px;  /* Sets logo width */
+            height: 90px;  /* Sets logo height */
+        }
+ 
+        .header-title{
+            font-size: 16px;  /* Sets title size */
+            font-weight: bold;  /* Makes title bold */
+        }
+
+        .main{
+            display: flex;  /* Places cards beside each other */
+            justify-content: center;  /* Centers the cards horizontally */
+            padding: 50px 30px;  /* Adds space around main content */
+            align-items: flex-start;  /* Aligns cards at the top */
+            gap: 55px;  /* Adds space between the cards */
+            flex: 1;  /* Fills available page space */
+        }
+
+        .generator-card{
+            width: 485px;  /* Sets generator card width */
+            border-radius: 20px;  /* Rounds card corners */
+            background-color: var(--brown);  /* Sets card background */
+            border: 2px dashed var(--border);  /* Sets dashed card border */
+            overflow: hidden;  /* Keeps content inside rounded corners */
+        }
+
+        .generator-title{
+            background-color: var(--light-brown);  /* Sets title background */
+            text-align: center;  /* Centers title text */
+            padding: 15px;  /* Adds space inside title */
+        }
+ 
+        .barcode{
+            font-size: 42px;  /* Sets barcode size */
+            letter-spacing: -5px;  /* Adjusts spacing between symbols */
+            line-height: 35px;  /* Sets line height */
+        }
+
+        .generator-title h1{
+            font-family: Georgia, serif;
+            font-size: 20px;  /* Sets heading size */
+            font-weight: normal;  /* Removes bold formatting */
+            margin-top: 10px;  /* Adds space above heading */
+        }
+
+        .form{
+            padding: 20px 25px;  /* Adds space around the form */
+        }
+
+        label{
+            display: block;  /* Places each label on its own line */
+            color: var(--cream);  /* Sets label color */
+            font-size: 14px;  /* Sets label size */
+            font-weight: bold; /* Makes labels bold */
+            margin-bottom: 8px;  /* Adds space below labels */
+        }
+
+        button{
+            display: block;  /* Makes button a block element */
+            width: 235px;  /* Sets button width */
+            margin: 5px auto 0;  /* Centers button */
+            padding: 10px;  /* Adds space inside button */
+            border: none;  /* Removes default border */
+            border-radius: 8px;  /* Rounds button corners */
+            background-color: var(--light-brown);  /* Sets button background */
+            color: var(--brown);  /* Sets button text color */
+            font-weight: bold;  /* Makes button text bold */
+            cursor: pointer;  /* Shows pointer when hovered */
+        }
+
+        button:hover{
+            background-color: var(--cream);
+        }
+
+        .result-card{
+            width: 365px;  /* Sets result card width */
+            min-height: 263px;  /* Sets minimum card height */
+            background-color: var(--brown);  /* Sets card background */
+            border: 2px dashed var(--border);  /* Sets dashed border */
+            border-radius: 20px;  /* Rounds card corners */
+            overflow: hidden;  /* Keeps content inside card */
+        }
+
+        .result-title{
+            background-color: var(--light-brown);  /* Sets title background */
+            padding: 28px 23px;  /* Adds space inside title */
+            font-family: Georgia, serif;
+            font-size: 18px;  /* Sets title size */
+        }
+
+        .result{
+            padding: 25px;  /* Adds space around result */
+            color: var(--cream);  /* Sets result text color */
+            text-align: center;  /* Centers result text */
+        }
+
+        .sku-code{
+            font-size: 32px;  /* Sets SKU text size */
+            letter-spacing: 3px;  /* Adds spacing between characters */
+            margin: 15px 0;  /* Adds vertical spacing */
+            font-weight: bold;  /* Makes SKU bold */
+        }
+
+        .result p{
+            margin: 8px;  /* Adds spacing around paragraphs */
+            font-size: 14px;  /* Sets paragraph text size */
+        }
+
+        footer{
+            height: 38px;  /* Sets footer height */
+            background-color: var(--white);  /* Sets footer background */
+            text-align: center;  /* Centers footer text */
+            padding: 10px;  /* Adds space inside footer */
+            font-size: 14px;  /* Sets footer text size */
+            font-weight: bold;  /* Makes footer text bold */
+            margin-top: auto;  /* Pushes footer to the bottom */
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.2.2/core.css">
+    <script type="module" src="https://pyscript.net/releases/2025.2.2/core.js"></script>
+
+</head>
+<body>
+    <header>
+        <!-- Project name -->
+        <div class="proj">
+            Skewer
+        </div>
+
+
+        <!-- Coffee logo -->
+        <div class="logo">
+        </div>
+
+
+        <!-- Page title -->
+        <div class="header-title">
+            𝄃𝄃𝄂𝄂𝄀𝄁 SKU Generator 
+        </div>
+
+    </header>
+
+    <main class="main">
+
+        <!-- SKU generator form card -->
+        <section class="generator-card">
+
+            <!-- Generator card heading -->
+            <div class="generator-title">
+
+                <!-- Barcode decoration -->
+                <div class="barcode">
+                    𝄃𝄃𝄂𝄂𝄀𝄁𝄃𝄂𝄂𝄃
+                </div>
+
+                <!-- Card title -->
+                <h1>SKU Generator</h1>
+
+            </div>
+
+            <div class="form">
+                <!-- Category selection -->
+                <label for="category">
+                    🗀 Category
+                </label>
+
+                <select id="category">
+                    <!-- Hot coffee category -->
+                    <option value="HC">
+                        Hot Coffee
+                    </option>
+
+                    <!-- Iced coffee category -->
+                    <option value="IC">
+                        Iced Coffee
+                    </option>
+
+                    <!-- Non-coffee category -->
+                    <option value="NC">
+                        Non-Coffee
+                    </option>
+
+                    <!-- Pastry category -->
+                    <option value="PA">
+                        Pastries
+                    </option>
+
+                    <!-- Food category -->
+                    <option value="FD">
+                        Food
+                    </option>
+
+                    <!-- Merchandise category -->
+                    <option value="ME">
+                        Merchandise
+                    </option>
+
+                </select>
+
+                <!-- Product name input -->
+                <label for="productName">
+                    🏷 Product Name
+                </label>
+
+                <input type="text" id="productName" placeholder="e.g. Americano">
+
+                <!-- Stock quantity input -->
+                <label for="stock">
+                    𖠿 Stock quantity
+                </label>
+
+                <input
+                    type="number"
+                    id="stock"
+                    placeholder="e.g. 50"
+                    min="1"
+                >
+
+                <!-- Button that runs the SKU generator -->
+                <button onclick="generateSKU()">
+                    Generate SKU
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="result-card">
+
+            <!-- Result card heading -->
+            <div class="result-title">
+                Your generated SKU will appear here.
+            </div>
+
+            <!-- Result information -->
+            <div class="result">
+
+                <!-- Displays the generated SKU -->
+                <div class="sku-code" id="skuCode">
+                    —
+                </div>
+
+                <!-- Displays the product name -->
+                <p id="productResult"></p>
+
+                <!-- Displays the stock quantity -->
+                <p id="stockResult"></p>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        SKU Generator - 1st Quarter Project
+    </footer>
+
+
+    <script>
+        // Generates a unique SKU when the button is clicked
+        function generateSKU() {
+
+            // Gets the selected product category
+            const category = document.getElementById("category").value;
+
+            // Gets the product name entered by the user
+            const productName = document.getElementById("productName").value.trim();
+
+            // Gets the stock quantity entered by the user
+            const stock =
+                document.getElementById("stock").value;
+
+            // Checks if the product name or stock quantity is empty
+            if (productName === "" || stock === "") {
+
+                // Shows an alert asking the user to complete the fields
+                alert("Please enter the product name and stock quantity.");
+
+                // Stops the function if information is missing
+                return;
+            }
+
+            // Converts the product name to uppercase letters
+            const upperProduct =
+                productName.toUpperCase();
+
+            // Removes spaces and special characters from the product name
+            const cleanProduct =
+                upperProduct.replace(/[^A-Z0-9]/g, "");
+
+            // Gets the first three characters of the cleaned product name
+            const productCode =
+                cleanProduct.substring(0, 3);
+
+            // Converts the stock number into a three-digit code
+            // Example: 50 becomes 050
+            const stockCode =
+                String(stock).padStart(3, "0");
+
+            // Combines the category, product code, and stock code
+            // Example: HC + AME + 050 = HCAME050
+            const sku =
+                category + productCode + stockCode;
+
+            // Displays the generated SKU on the result card
+            document.getElementById("skuCode").textContent =
+                sku;
+
+            // Displays the entered product name
+            document.getElementById("productResult").textContent =
+                "Product: " + productName;
+
+            // Displays the entered stock quantity
+            document.getElementById("stockResult").textContent =
+                "Stock: " + stock;
+        }
+    </script>
+</body>
+</html>
